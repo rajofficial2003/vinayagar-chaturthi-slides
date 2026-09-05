@@ -226,24 +226,25 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 0.5rem;
   background: radial-gradient(circle at center, #FFFFFF 0%, #FFF3E6 100%);
-  overflow: auto;
+  overflow: hidden;
 }
 
 /* ---------------- Slide Common ---------------- */
 .slide {
   position: absolute;
-  width: 100%;
-  max-width: 1100px;
-  height: calc(100% - 1rem);
-  max-height: 680px;
+  width: 1080px;
+  height: 670px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(var(--slide-scale, 1));
+  transform-origin: center center;
   border-radius: 12px;
   box-shadow: var(--shadow-slide);
   opacity: 0;
   visibility: hidden;
-  transform: scale(0.97);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.35s ease, visibility 0.35s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -252,7 +253,6 @@ body {
 .slide.active {
   opacity: 1;
   visibility: visible;
-  transform: scale(1);
   z-index: 2;
 }
 
@@ -1437,3 +1437,40 @@ body {
 .text-blue { color: #0284C7; }
 .text-purple { color: #9333EA; }
 .text-maroon { color: var(--maroon-primary); }
+
+/* ---------------- Mobile Responsive Overlay & Nav Adjustments ---------------- */
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 250px;
+    z-index: 200;
+  }
+
+  .top-nav {
+    padding: 0 0.75rem;
+  }
+
+  .nav-heading {
+    font-size: 0.95rem;
+  }
+
+  .badge-red {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .slide-title-preview {
+    display: none;
+  }
+
+  .bottom-bar {
+    padding: 0 0.75rem;
+  }
+
+  .overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

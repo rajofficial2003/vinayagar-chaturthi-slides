@@ -141,9 +141,58 @@ document.addEventListener('DOMContentLoaded', () => {
   if (toggleSidebarBtn && sidebar) {
     toggleSidebarBtn.addEventListener('click', () => {
       sidebar.classList.toggle('collapsed');
+      setTimeout(updateSlideScale, 300);
     });
   }
 
+  // Auto collapse sidebar on mobile initial load
+  if (window.innerWidth < 768 && sidebar) {
+    sidebar.classList.add('collapsed');
+  }
+
+  // Dynamic Scale Calculation so Mobile view matches Laptop view 100%
+  function updateSlideScale() {
+    const stage = document.querySelector('.stage');
+    if (!stage) return;
+
+    const stageWidth = stage.clientWidth - 16; 
+    const stageHeight = stage.clientHeight - 16;
+
+    const baseWidth = 1080;
+    const baseHeight = 670;
+
+    let scale = Math.min(stageWidth / baseWidth, stageHeight / baseHeight);
+    scale = Math.min(Math.max(scale, 0.2), 1.15);
+
+    document.documentElement.style.setProperty('--slide-scale', scale);
+  }
+
+  // Touch Swipe Navigation for Mobile Devices
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const stageEl = document.querySelector('.stage');
+
+  if (stageEl) {
+    stageEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    stageEl.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const swipeThreshold = 50;
+      if (touchEndX < touchStartX - swipeThreshold) {
+        if (currentIndex < totalSlides - 1) goToSlide(currentIndex + 1);
+      } else if (touchEndX > touchStartX + swipeThreshold) {
+        if (currentIndex > 0) goToSlide(currentIndex - 1);
+      }
+    }, { passive: true });
+  }
+
+  window.addEventListener('resize', updateSlideScale);
+  window.addEventListener('orientationchange', updateSlideScale);
+
   // Initial State Sync
   updateSlideState();
+  updateSlideScale();
 });
+
