@@ -6,7 +6,6 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "generate_pptx.js",
       "package.json",
       "package-lock.json"
     ],
